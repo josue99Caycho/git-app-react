@@ -7,15 +7,34 @@ import { CustomSearch } from "./Shared/Components/CustomSearch"
 
 export const GifsApp = () => {
 
-    const [searchTearms, setSearchTerms] = useState([]);
+    const [searchTearms, setSearchTerms] = useState<string[]>([]);
 
     const handlerClicked = (terms: string) => {
         console.log(terms);
     }
 
     const handlerSearch = (search: string) => {
+
         console.log('La búsqueda fue: ', search);
-        const newSearchList = [search, ...searchTearms];
+
+        if (!search) {
+            console.log('La búsqueda es vacía');
+            return;
+        }
+
+        const newSearch = search.trim().toLowerCase();
+
+        // Buscar terminos con el mismo nombre
+        const existeTermino = searchTearms.some((term: string) => term.toLowerCase() === newSearch);
+
+        if (existeTermino) {
+            console.log('El termino ya existe y no se agrega');
+            return;
+        }
+
+        // Agregar nuevo elemento a la lista, solo deben de existir hasta 8 elementos dentro de la lista
+        const newSearchList = [newSearch, ...searchTearms].slice(0, 8);
+        setSearchTerms(newSearchList);
     }
 
     return (
@@ -34,7 +53,7 @@ export const GifsApp = () => {
             />
 
             {/* Búsquedas previas */}
-            <PreviousSearches searches={searchTearms} onLoadClicked={handlerClicked}/>
+            <PreviousSearches searches={searchTearms} onLoadClicked={handlerClicked} />
 
             {/* Gifs */}
             <GifList gif={mockGifs} />

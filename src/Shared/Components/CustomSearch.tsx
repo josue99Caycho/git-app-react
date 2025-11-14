@@ -1,4 +1,4 @@
-import { useState, type KeyboardEvent} from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 
 interface CustomSearchProps {
     description: string;
@@ -8,6 +8,19 @@ interface CustomSearchProps {
 export const CustomSearch = ({ description, onQuerySearch }: CustomSearchProps) => {
 
     const [search, setSearch] = useState('');
+
+    useEffect(() => {
+
+        const timeoutId = setTimeout(() => {
+            onQuerySearch(search);
+        }, 700);
+
+        return () => {
+            clearTimeout(timeoutId);
+        }
+
+    }, [search])
+
 
     const onHandlerEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 
