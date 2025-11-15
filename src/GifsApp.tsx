@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { getGifByQuery } from "./Gifs/Actions/get-gif-by-query"
 import { GifList } from "./Gifs/Components/GifList"
 import { PreviousSearches } from "./Gifs/Components/PreviousSearches"
 import { mockGifs } from "./mock-data/gifs.mock"
@@ -13,7 +14,7 @@ export const GifsApp = () => {
         console.log(terms);
     }
 
-    const handlerSearch = (search: string) => {
+    const handlerSearch = async (search: string) => {
 
         console.log('La búsqueda fue: ', search);
 
@@ -35,6 +36,10 @@ export const GifsApp = () => {
         // Agregar nuevo elemento a la lista, solo deben de existir hasta 8 elementos dentro de la lista
         const newSearchList = [newSearch, ...searchTearms].slice(0, 8);
         setSearchTerms(newSearchList);
+
+        // Llamar api de giphy
+        const response = await getGifByQuery(newSearch);
+        console.log(response);
     }
 
     return (
