@@ -2,13 +2,17 @@ import { useState } from "react"
 import { getGifByQuery } from "./Gifs/Actions/get-gif-by-query"
 import { GifList } from "./Gifs/Components/GifList"
 import { PreviousSearches } from "./Gifs/Components/PreviousSearches"
-import { mockGifs } from "./mock-data/gifs.mock"
 import { CustomHeader } from "./Shared/Components/CustomHeader"
 import { CustomSearch } from "./Shared/Components/CustomSearch"
+import type { Gif } from "./Gifs/Interfaces/gif.interface"
 
 export const GifsApp = () => {
 
+    // State - Búsqueda de Gifs
     const [searchTearms, setSearchTerms] = useState<string[]>([]);
+
+    // State - Listado de Gifs
+    const [gifList, setGifList] = useState<Gif[]>([])
 
     const handlerClicked = (terms: string) => {
         console.log(terms);
@@ -40,6 +44,9 @@ export const GifsApp = () => {
         // Llamar api de giphy
         const response = await getGifByQuery(newSearch);
         console.log(response);
+
+        // Setear nueva resultado en la lista de gifs
+        setGifList(response);
     }
 
     return (
@@ -61,7 +68,7 @@ export const GifsApp = () => {
             <PreviousSearches searches={searchTearms} onLoadClicked={handlerClicked} />
 
             {/* Gifs */}
-            <GifList gif={mockGifs} />
+            <GifList gif={gifList} />
 
         </>
     )
