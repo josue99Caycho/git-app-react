@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getGifByQuery } from "../Actions/get-gif-by-query";
 import type { Gif } from "../Interfaces/gif.interface";
 
@@ -10,8 +10,15 @@ export const useGifs = () => {
     // State - Listado de Gifs
     const [gifList, setGifList] = useState<Gif[]>([])
 
+    const previusTermins = useRef<Record<string, Gif[]>>({});
+
     const handlerClicked = (terms: string) => {
+
         console.log(terms);
+
+        if(previusTermins.current[terms]) {
+            setGifList(previusTermins.current[terms]);
+        }
     }
 
     const handlerSearch = async (search: string) => {
@@ -43,6 +50,8 @@ export const useGifs = () => {
 
         // Setear nueva resultado en la lista de gifs
         setGifList(response);
+
+        previusTermins.current[newSearch] = response;
     }
 
     return {
